@@ -1,0 +1,38 @@
+import { Model } from 'mongoose';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+
+import { Trip, TripDocument } from './schemas/trip.schema';
+import { CreateTripDto } from './dto/create-trip.dto';
+import { CreateBillDto } from './dto/create-bill.dto';
+
+@Injectable()
+export class TripsService {
+  constructor(@InjectModel(Trip.name) private tripModel: Model<TripDocument>) {}
+
+  async createTrip(createTripDto: CreateTripDto): Promise<Trip> {
+    const createdTrip = new this.tripModel(createTripDto);
+    return createdTrip.save();
+  }
+
+  async createBill(
+    userId: string,
+    tripId: string,
+    createBillDto: CreateBillDto,
+  ): Promise<boolean> {
+    const trip = await this.tripModel.findById(tripId);
+    const bill = { ...createBillDto, participants: [], owner: userId };
+    bill.participants = createBillDto.participants.map((participant) => ({
+      userId: participant,
+      paid: false,
+    }));
+    trip.bills.push(bill);
+    await trip.save();
+    return true;
+  }
+
+  async findTrips(userId: string): Promise<Trip[]> {
+    const trips = await this.tripModel.find({ owner: userId });
+    return trips;
+  }
+}
