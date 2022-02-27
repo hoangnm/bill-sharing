@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { BillsService } from './bills.service';
 import { CreateBillDto } from './dto/create-bill.dto';
 import { Bill } from './schemas/bill.schema';
@@ -17,6 +17,12 @@ export class BillsController {
   async findDebtBills(): Promise<Bill[]> {
     const userId = 'a1881c06eec96db9901c7bbf';
     return this.billsService.findDebtBills(userId);
+  }
+
+  @Post('/debts/:id/pay')
+  async payDebtBill(@Param('id') debtId: string): Promise<Bill> {
+    const userId = 'a1881c06eec96db9901c7bbf';
+    return this.billsService.payDebtBill(userId, debtId);
   }
 
   @Post()

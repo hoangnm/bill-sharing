@@ -23,4 +23,16 @@ export class BillsService {
     const bills = this.billModel.find({ 'participants.userId': userId });
     return bills;
   }
+
+  async payDebtBill(userId: string, debtId: string): Promise<Bill> {
+    const bill = await this.billModel.findOne({ _id: debtId });
+    for (const participant of bill.participants) {
+      if (participant.userId === userId) {
+        participant.paid = true;
+        break;
+      }
+    }
+    await bill.save();
+    return bill;
+  }
 }

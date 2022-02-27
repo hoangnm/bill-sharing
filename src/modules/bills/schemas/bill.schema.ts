@@ -3,6 +3,11 @@ import { Document } from 'mongoose';
 
 export type BillDocument = Bill & Document;
 
+export class Participant {
+  userId: string;
+  paid: boolean;
+}
+
 @Schema()
 export class Bill {
   @Prop()
@@ -10,6 +15,15 @@ export class Bill {
 
   @Prop()
   amount: number;
+
+  @Prop()
+  participants: Participant[];
+
+  @Prop()
+  owner: string;
+
+  @Prop()
+  tripId: string;
 }
 
 export const BillSchema = SchemaFactory.createForClass(Bill);
