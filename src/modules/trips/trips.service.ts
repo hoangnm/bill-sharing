@@ -17,11 +17,15 @@ export class TripsService {
 
   async createBill(
     userId: string,
-    tripId: string,
     createBillDto: CreateBillDto,
   ): Promise<boolean> {
-    const trip = await this.tripModel.findById(tripId);
-    const bill = { ...createBillDto, participants: [], owner: userId };
+    const trip = await this.tripModel.findById(createBillDto.tripId);
+    const bill = {
+      ...createBillDto,
+      participants: [],
+      owner: userId,
+      tripId: undefined,
+    };
     bill.participants = createBillDto.participants.map((participant) => ({
       userId: participant,
       paid: false,
@@ -33,6 +37,16 @@ export class TripsService {
 
   async findTrips(userId: string): Promise<Trip[]> {
     const trips = await this.tripModel.find({ owner: userId });
+    return trips;
+  }
+
+  async findOwnBills(userId: string): Promise<Trip[]> {
+    const trips = await this.tripModel.find({
+      'bills.owner': userId,
+    });
+    trips.forEach((trip) => {
+      trip.bills = trip.bills.filter((bill) => bill.owner === userId);
+    });
     return trips;
   }
 }
