@@ -27,6 +27,7 @@ export class BillsController {
 
   @Post()
   async create(@Body() createBillDto: CreateBillDto) {
-    return this.billsService.createBill(createBillDto);
+    const userId = 'b3daa77b4c04a9551b8781d0';
+    return this.billsService.createBill(userId, createBillDto);
   }
 }

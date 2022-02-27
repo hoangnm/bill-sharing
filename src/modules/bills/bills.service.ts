@@ -9,8 +9,16 @@ import { CreateBillDto } from './dto/create-bill.dto';
 export class BillsService {
   constructor(@InjectModel(Bill.name) private billModel: Model<BillDocument>) {}
 
-  async createBill(createBillDto: CreateBillDto): Promise<Bill> {
-    const createdBill = new this.billModel(createBillDto);
+  async createBill(
+    ownerId: string,
+    createBillDto: CreateBillDto,
+  ): Promise<Bill> {
+    const bill: Bill = { ...createBillDto, participants: [], owner: ownerId };
+    bill.participants = createBillDto.participants.map((participant) => ({
+      userId: participant,
+      paid: false,
+    }));
+    const createdBill = new this.billModel(bill);
     return createdBill.save();
   }
 
