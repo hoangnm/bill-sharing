@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Headers } from '@nestjs/common';
 import { TripsService } from './trips.service';
 import { CreateBillDto } from './dto/create-bill.dto';
 import { Trip } from './schemas/trip.schema';
@@ -8,14 +8,15 @@ export class BillsController {
   constructor(private tripsService: TripsService) {}
 
   @Post()
-  async createBill(@Body() createBillDto: CreateBillDto): Promise<boolean> {
-    const userId = 'b3daa77b4c04a9551b8781d0';
-    return this.tripsService.createBill(userId, createBillDto);
+  async createBill(
+    @Headers() headers,
+    @Body() createBillDto: CreateBillDto,
+  ): Promise<boolean> {
+    return this.tripsService.createBill(headers.userid, createBillDto);
   }
 
   @Get('own')
-  async findOwnBills(): Promise<Trip[]> {
-    const userId = 'b3daa77b4c04a9551b8781d0';
-    return this.tripsService.findOwnBills(userId);
+  async findOwnBills(@Headers() headers): Promise<Trip[]> {
+    return this.tripsService.findOwnBills(headers.userid);
   }
 }
