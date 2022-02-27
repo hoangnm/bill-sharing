@@ -10,7 +10,7 @@ import { TripsModule } from './modules/trips/trips.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
-        uri: 'mongodb://localhost/bill-sharing?authSource=admin',
+        uri: `mongodb://localhost/${config.get('DB_NAME')}?authSource=admin`,
         auth: {
           username: config.get('DB_USER'),
           password: config.get('DB_PASS'),
