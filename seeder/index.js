@@ -17,13 +17,16 @@ const config = {
 };
 const seeder = new Seeder(config);
 
-const collections = seeder.readCollectionsFromPath(path.resolve('./data'), {
-  extensions: ['js', 'json', 'ts'],
-  transformers: [Seeder.Transformers.replaceDocumentIdWithUnderscoreId],
-});
+const collections = seeder.readCollectionsFromPath(
+  path.resolve('./seeder/data'),
+  {
+    extensions: ['js', 'json', 'ts'],
+    transformers: [Seeder.Transformers.replaceDocumentIdWithUnderscoreId],
+  },
+);
 
 const init = async () => {
-  console.log('initializing seeder data');
+  console.log('initializing seed data');
   try {
     await seeder.import(collections);
   } catch (err) {
