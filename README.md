@@ -44,3 +44,6 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Exploring api with swagger
+Opening http://localhost:3000/api to explore the APIs after running the app from localhost.
