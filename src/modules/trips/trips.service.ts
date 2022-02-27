@@ -35,11 +35,6 @@ export class TripsService {
     return true;
   }
 
-  async findTrips(userId: string): Promise<Trip[]> {
-    const trips = await this.tripModel.find({ owner: userId });
-    return trips;
-  }
-
   async findOwnBills(userId: string): Promise<Trip[]> {
     const trips = await this.tripModel.find({
       'bills.owner': userId,
